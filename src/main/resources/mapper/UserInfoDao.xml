@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.yys.business.mapper.UserInfoDao">
+    <resultMap id="userMap" type="com.iflytek.yys.business.model.entity.UserInfo">
+        <result property="docCode" column="doc_code" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="listAllUser" resultType="com.iflytek.yys.business.model.dto.GroupUserDTO">
+        SELECT uinfo.user_name as docCode,
+        uinfo.rel_name as docName,
+        uinfo.org_id as hosCode
+        FROM ud_doctor uinfo
+        WHERE uinfo.org_id = #{hosCode}
+        AND uinfo.dpt_code = #{deptCode}
+        AND uinfo.user_state = 'A'
+        <if test="docName != null and docName != ''">
+            AND uinfo.rel_name like ( '%'|| #{docName}|| '%' )
+        </if>
+        order by uinfo.update_time desc
+    </select>
+</mapper>
